@@ -1,11 +1,33 @@
-# app.py
 import os
 import streamlit as st
+
+# Check if the required packages are installed, and install them if not
+try:
+    import keras
+except ImportError:
+    os.system("pip install keras")
+try:
+    import tensorflow
+except ImportError:
+    os.system("pip install tensorflow")
+try:
+    import pillow
+except ImportError:
+    os.system("pip install pillow")
+try:
+    import numpy
+except ImportError:
+    os.system("pip install numpy")
+try:
+    import matplotlib
+except ImportError:
+    os.system("pip install matplotlib")
+
+from keras.models import load_model
 from keras.preprocessing import image
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-from keras.models import load_model
 
 # Load the trained model
 model_path = '/best_model.h5'
