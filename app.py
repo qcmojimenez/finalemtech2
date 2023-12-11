@@ -1,27 +1,37 @@
-import os
 import streamlit as st
+def install_packages():
+    try:
+        import keras
+    except ImportError:
+        st.warning("Installing Keras...")
+        st.code("!pip install keras", language="bash")
+        st.success("Keras installed!")
+    try:
+        import tensorflow
+    except ImportError:
+        st.warning("Installing TensorFlow...")
+        st.code("!pip install tensorflow", language="bash")
+        st.success("TensorFlow installed!")
+    try:
+        import pillow
+    except ImportError:
+        st.warning("Installing Pillow...")
+        st.code("!pip install pillow", language="bash")
+        st.success("Pillow installed!")
+    try:
+        import numpy
+    except ImportError:
+        st.warning("Installing NumPy...")
+        st.code("!pip install numpy", language="bash")
+        st.success("NumPy installed!")
+    try:
+        import matplotlib
+    except ImportError:
+        st.warning("Installing Matplotlib...")
+        st.code("!pip install matplotlib", language="bash")
+        st.success("Matplotlib installed!")
 
-# Check if the required packages are installed, and install them if not
-try:
-    import keras
-except ImportError:
-    os.system("pip install keras")
-try:
-    import tensorflow
-except ImportError:
-    os.system("pip install tensorflow")
-try:
-    import pillow
-except ImportError:
-    os.system("pip install pillow")
-try:
-    import numpy
-except ImportError:
-    os.system("pip install numpy")
-try:
-    import matplotlib
-except ImportError:
-    os.system("pip install matplotlib")
+install_packages()
 
 from keras.models import load_model
 from keras.preprocessing import image
