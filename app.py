@@ -1,43 +1,25 @@
 import streamlit as st
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
+import numpy as np
+from PIL import Image
+import matplotlib.pyplot as plt
+
 def install_packages():
-    try:
-        import keras
-    except ImportError:
-        st.warning("Installing Keras...")
-        st.code("!pip install keras", language="bash")
-        st.success("Keras installed!")
     try:
         import tensorflow
     except ImportError:
         st.warning("Installing TensorFlow...")
         st.code("!pip install tensorflow", language="bash")
         st.success("TensorFlow installed!")
-    try:
-        import pillow
-    except ImportError:
-        st.warning("Installing Pillow...")
-        st.code("!pip install pillow", language="bash")
-        st.success("Pillow installed!")
-    try:
-        import numpy
-    except ImportError:
-        st.warning("Installing NumPy...")
-        st.code("!pip install numpy", language="bash")
-        st.success("NumPy installed!")
-    try:
-        import matplotlib
-    except ImportError:
-        st.warning("Installing Matplotlib...")
-        st.code("!pip install matplotlib", language="bash")
-        st.success("Matplotlib installed!")
 
+# Install required packages
 install_packages()
 
-from keras.models import load_model
-from keras.preprocessing import image
-import numpy as np
-from PIL import Image
-import matplotlib.pyplot as plt
+# Import the installed packages
+from tensorflow.keras.models import load_model
+
 
 # Load the trained model
 model_path = '/best_model.h5'
