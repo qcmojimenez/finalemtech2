@@ -9,40 +9,48 @@
 # Date Perform: December 10, 2023
 # Date Submitted: December 11, 2023
 import streamlit as st
-from PIL import Image
 import numpy as np
-import tensorflow as tf
+from keras.preprocessing import image
+from keras.models import load_model
+from PIL import Image
 
-# Add the following lines to explicitly set _file_
-if _name_ == '_main_':
-    import _main_ as main
-    setattr(main, '_file_', 'app.py')  # Replace with your actual script name
+# Load the trained model
+model_path = 'best_model.h5'  # Update with the correct path
+model = load_model(model_path)
 
-# Define a dummy hash function for builtins.function
-def my_hash_func(func):
-    return hash(func.__code__)
+# Define the class labels
+class_names = ['happy', 'sad']
 
-@st.cache(allow_output_mutation=True, hash_funcs={type(lambda: None): my_hash_func})
-def load_model():
-    model = tf.keras.models.load_model('best_model.h5')
-    return model
+# Streamlit app
+st.title('Happy or Sad Detection')
 
-st.title("Emtech2 - Emotion Prediction App")
+# Description
+st.markdown("""
+    The concept of the project is based on the midterm exam that identifies the weather.
+    We applied a CNN model to train the model for detecting if the face is happy or sad.
+    You can upload a photo we reserved from the Google Drive link that we also submitted.
+""")
 
-model = load_model()
-
+# Upload image through Streamlit
 uploaded_file = st.file_uploader("Choose an image...", type="jpg")
 
 if uploaded_file is not None:
-    img = Image.open(uploaded_file)
-    img = img.resize((64, 64))
-    img_array = np.array(img)
-    img_array = img_array / 255.0
+    # Display the uploaded image
+    image_display = Image.open(uploaded_file)
+    st.image(image_display, caption='Uploaded Image.', use_column_width=True)
+
+    # Preprocess the image for the model
+    img = image.load_img(uploaded_file, target_size=(64, 64))
+    img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.0
 
+    # Make prediction
     prediction = model.predict(img_array)
-    predicted_class = "Happy" if prediction[0, 0] >= 0.5 else "Sad"
-    confidence = prediction[0, 0] if predicted_class == "Happy" else 1 - prediction[0, 0]
-    confidence_scalar = float(confidence)
+    predicted_class_index = np.argmax(prediction[0])
+    predicted_class = class_names[predicted_class_index]
+    probability = np.max(prediction)
 
-    st.image(img, caption=f'Predicted Class: {predicted_class} (Confidence: {confidence_scalar:.2f})', use_column_width=True)
+    # Display the prediction
+    st.write(f'The predicted class is: {predicted_class}')
+    st.write(f'The probability is: {probability}')
