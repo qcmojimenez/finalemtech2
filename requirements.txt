@@ -1,4 +1,5 @@
-Keras==2.6.0
+keras==2.6.0
 Pillow==8.2.0
 numpy==1.21.0
 matplotlib==3.4.3
+streamlit==1.18.0
