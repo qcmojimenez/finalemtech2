@@ -1,26 +1,26 @@
-import streamlit as st
-import cv2
+import os
+from keras.preprocessing.image import ImageDataGenerator
+from keras.models import Sequential, load_model
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization
+from keras.callbacks import ModelCheckpoint
+from keras.metrics import BinaryAccuracy
+from keras.preprocessing import image
 import numpy as np
+import streamlit as st
 
-def process_image(uploaded_file):
-    if uploaded_file is not None:
-        # Read the image
-        image = cv2.imdecode(np.fromstring(uploaded_file.read(), np.uint8), 1)
+loaded_model = load_model(os.path.join(save_dir, 'best_model.h5'))
+st.title("Emotion Detection Streamlit App")
+uploaded_file = st.file_uploader("Choose an image...", type="jpg")
 
-        # Convert the image to grayscale
-        grayscale_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+if uploaded_file is not None:
 
-        # Display the original and grayscale images
-        st.image([image, grayscale_image], caption=['Original Image', 'Grayscale Image'], use_column_width=True)
+    img = image.load_img(uploaded_file, target_size=(64, 64))
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array /= 255.0
 
-def main():
-    st.title("Happy or Sad Detection")
-    st.write("The concept of the project is based on the midterm exam that identifies the weather. We applied a CNN model to train the model for detecting if the face is happy or sad. You can upload a photo reserved from the Google Drive link that we also submitted.")
+    prediction = loaded_model.predict(img_array)
+    st.write(f"Predicted Probability: {prediction[0]}")
+    st.write(f"Predicted Class: {round(prediction[0][0])}")
 
-    uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
-    if uploaded_file:
-        process_image(uploaded_file)
-
-if __name__ == "__main__":
-    main()
