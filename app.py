@@ -1,4 +1,3 @@
-!pip install --upgrade pip
 import os
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential, load_model
